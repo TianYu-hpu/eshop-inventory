@@ -1,6 +1,7 @@
 package com.roncoo.eshop.inventory;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.roncoo.eshop.inventory.listener.InitListener;
 import lombok.Data;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -10,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
@@ -97,5 +99,16 @@ public class Application {
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfigures() {
         return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    /**
+     * listener 注册
+     * @return
+     */
+    @Bean
+    public ServletListenerRegistrationBean servletListenerRegistrationBean(){
+        ServletListenerRegistrationBean servletListenerRegistrationBean = new ServletListenerRegistrationBean();
+        servletListenerRegistrationBean.setListener(new InitListener());
+        return servletListenerRegistrationBean;
     }
 }

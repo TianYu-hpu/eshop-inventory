@@ -37,8 +37,8 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table tableName="user" domainObjectName="User">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        <table tableName="product_inventory" domainObjectName="ProductInventory">
+            <generatedKey column="product_id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
 </generatorConfiguration>
