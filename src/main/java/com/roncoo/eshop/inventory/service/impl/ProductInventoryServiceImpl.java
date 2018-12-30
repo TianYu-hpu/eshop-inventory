@@ -7,6 +7,7 @@ import com.roncoo.eshop.inventory.mapper.ProductInventoryMapper;
 import com.roncoo.eshop.inventory.service.ProductInventoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
 import javax.annotation.Resource;
 
@@ -35,12 +36,12 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
 
     /**
      * 查找数据库商品库存
-     * @param productInventory
+     * @param productId
      * @return
      */
     @Override
-    public ProductInventory findProductInventory(ProductInventory productInventory) {
-        return productInventoryMapper.selectByPrimaryKey(productInventory.getProductId());
+    public ProductInventory findProductInventory(Integer productId) {
+        return productInventoryMapper.selectByPrimaryKey(productId);
     }
 
     /**
@@ -61,6 +62,21 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
     public void updateProductInventoryCache(ProductInventory productInventory) {
         String key = Constants.PRODUCT_INVENTORY_CNT_KEY + productInventory.getProductId();
         redisDao.set(key, String.valueOf(productInventory.getInventoryCnt()));
+    }
+
+    @Override
+    public ProductInventory getProductInventoryCache(Integer productId) {
+        String key = Constants.PRODUCT_INVENTORY_CNT_KEY + productId;
+        String inventoryCntCacheStr =  redisDao.get(key);
+        if(StringUtils.isEmpty(inventoryCntCacheStr)) {
+            try {
+                Long inventoryCnt = Long.parseLong(inventoryCntCacheStr);
+                return new ProductInventory(productId, inventoryCnt);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
 }

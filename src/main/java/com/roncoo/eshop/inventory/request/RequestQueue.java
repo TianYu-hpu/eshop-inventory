@@ -1,11 +1,13 @@
 package com.roncoo.eshop.inventory.request;
 
 import com.roncoo.eshop.inventory.constants.Constants;
-import com.roncoo.eshop.inventory.thread.WorkerThread;
+import com.roncoo.eshop.inventory.thread.RequestProcessorThread;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -24,13 +26,11 @@ public class RequestQueue {
      * 内存队列
      */
     private List<ArrayBlockingQueue<Request>> queue = new ArrayList<ArrayBlockingQueue<Request>>();
+    /**
+     * flagMap 用于读请求去重
+     */
+    private Map<Integer, Boolean> flagmap= new ConcurrentHashMap<Integer, Boolean>();
 
-    public RequestQueue() {
-        for(int i = 0; i < Constants.FIXED_THREAD_NUM; i++) {
-            queue.add(new ArrayBlockingQueue<Request>(100));
-            threadPool.submit(new WorkerThread(queue));
-        }
-    }
     private static class Singleton {
 
         private static RequestQueue instance;
@@ -55,4 +55,26 @@ public class RequestQueue {
     public void addQueue(ArrayBlockingQueue<Request> queue) {
         this.queue.add(queue);
     }
+
+    public int queueSize() {
+        return this.queue.size();
+    }
+
+    /**
+     * 获取内存队列
+     * @param index
+     * @return
+     */
+    public ArrayBlockingQueue<Request> getQueue(int index) {
+        return this.queue.get(index);
+    }
+
+    /**
+     *
+     * @return flagMap
+     */
+    public Map<Integer, Boolean> getFlagmap() {
+        return flagmap;
+    }
+
 }

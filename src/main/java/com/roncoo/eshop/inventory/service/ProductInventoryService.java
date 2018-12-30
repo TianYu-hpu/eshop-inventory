@@ -13,7 +13,9 @@ public interface ProductInventoryService {
 
     void removeProductInventoryCache(ProductInventory productInventory);
 
-    ProductInventory findProductInventory(ProductInventory productInventory);
+    ProductInventory findProductInventory(Integer productId);
 
     void updateProductInventoryCache(ProductInventory productInventory);
+
+    ProductInventory getProductInventoryCache(Integer productId);
 }

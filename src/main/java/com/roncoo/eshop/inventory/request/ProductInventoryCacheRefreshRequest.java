@@ -11,24 +11,30 @@ import com.roncoo.eshop.inventory.service.ProductInventoryService;
  * 重新加载商品库存缓存
  *
  */
-public class ProductInvetoryCacheReloadUpdateRequest implements Request {
+public class ProductInventoryCacheRefreshRequest implements Request {
 
     private ProductInventoryService productInventoryService;
     /**
      * 商品id
      */
-    private ProductInventory productInventory;
+    private Integer productId;
 
-    public ProductInvetoryCacheReloadUpdateRequest(ProductInventory productInventory, ProductInventoryService productInventoryService) {
-        this.productInventory = productInventory;
+    public ProductInventoryCacheRefreshRequest(Integer productId, ProductInventoryService productInventoryService) {
+        this.productId = productId;
         this.productInventoryService = productInventoryService;
     }
 
     @Override
     public void process() {
+
         //查询库存
-        productInventoryService.findProductInventory(productInventory);
+        ProductInventory productInventory = productInventoryService.findProductInventory(productId);
         //更新redis缓存
         productInventoryService.updateProductInventoryCache(productInventory);
+    }
+
+    @Override
+    public Integer getProductId() {
+        return productId;
     }
 }

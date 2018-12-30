@@ -13,4 +13,13 @@ public interface Constants {
     int FIXED_THREAD_NUM = 10;
 
     String PRODUCT_INVENTORY_CNT_KEY = "product:inventory:";
+
+    String SUCCESS = "success";
+
+    String FAILURE = "failure";
+    /**
+     * 请求最大等待时间
+     */
+    long REQUEST_MAX_WAIT_TIME = 200;
+
 }

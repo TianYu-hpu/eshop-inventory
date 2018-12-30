@@ -21,16 +21,13 @@ public class RequestProcessorThreadPool {
      * 线程池
      */
     private ExecutorService threadPool = Executors.newFixedThreadPool(Constants.FIXED_THREAD_NUM);
-    /**
-     * 内存队列
-     */
-    private List<ArrayBlockingQueue<Request>> queue = new ArrayList<ArrayBlockingQueue<Request>>();
 
     private RequestProcessorThreadPool() {
         RequestQueue requestQueue = new RequestQueue();
         for(int i = 0; i < Constants.FIXED_THREAD_NUM; i++) {
-            requestQueue.addQueue(new ArrayBlockingQueue<Request>(100));
-            threadPool.submit(new WorkerThread(queue));
+            ArrayBlockingQueue<Request> queue = new ArrayBlockingQueue<Request>(100);
+            requestQueue.addQueue(queue);
+            threadPool.submit(new RequestProcessorThread(queue));
         }
     }
     private static class Singleton {
