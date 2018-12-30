@@ -22,4 +22,8 @@ public interface Constants {
      */
     long REQUEST_MAX_WAIT_TIME = 200;
 
+    /**
+     * 内存队列大小
+     */
+    int QUEUE_SIZE = 100;
 }

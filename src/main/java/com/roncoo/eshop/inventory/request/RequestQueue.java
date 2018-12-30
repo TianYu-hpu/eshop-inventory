@@ -19,10 +19,6 @@ import java.util.concurrent.Executors;
 public class RequestQueue {
 
     /**
-     * 线程池
-     */
-    private ExecutorService threadPool = Executors.newFixedThreadPool(Constants.FIXED_THREAD_NUM);
-    /**
      * 内存队列
      */
     private List<ArrayBlockingQueue<Request>> queue = new ArrayList<ArrayBlockingQueue<Request>>();
@@ -34,7 +30,6 @@ public class RequestQueue {
         static {
             instance = new RequestQueue();
         }
-
         public static RequestQueue getInstance() {
             return instance;
         }

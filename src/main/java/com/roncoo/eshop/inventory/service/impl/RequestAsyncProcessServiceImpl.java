@@ -5,6 +5,8 @@ import com.roncoo.eshop.inventory.request.ProductInvetoryDBUpdateRequest;
 import com.roncoo.eshop.inventory.request.Request;
 import com.roncoo.eshop.inventory.request.RequestQueue;
 import com.roncoo.eshop.inventory.service.RequestAsyncProcessService;
+import com.roncoo.eshop.inventory.thread.RequestProcessorThread;
+import com.roncoo.eshop.inventory.thread.RequestProcessorThreadPool;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -25,6 +27,7 @@ public class RequestAsyncProcessServiceImpl implements RequestAsyncProcessServic
             ArrayBlockingQueue<Request>  queue = getRouteKey(request.getProductId());
             //将请求放入到对应的内存队列中，完成路由操作
             queue.put(request);
+            RequestProcessorThreadPool.getInstance().getThreadPool().submit(new RequestProcessorThread(queue));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

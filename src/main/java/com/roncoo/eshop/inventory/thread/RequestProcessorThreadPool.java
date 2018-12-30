@@ -20,16 +20,21 @@ public class RequestProcessorThreadPool {
     /**
      * 线程池
      */
-    private ExecutorService threadPool = Executors.newFixedThreadPool(Constants.FIXED_THREAD_NUM);
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(Constants.FIXED_THREAD_NUM);
 
     private RequestProcessorThreadPool() {
         RequestQueue requestQueue = new RequestQueue();
         for(int i = 0; i < Constants.FIXED_THREAD_NUM; i++) {
-            ArrayBlockingQueue<Request> queue = new ArrayBlockingQueue<Request>(100);
+            ArrayBlockingQueue<Request> queue = new ArrayBlockingQueue<Request>(Constants.QUEUE_SIZE);
             requestQueue.addQueue(queue);
-            threadPool.submit(new RequestProcessorThread(queue));
+
         }
     }
+
+    public ExecutorService getThreadPool() {
+        return threadPool;
+    }
+
     private static class Singleton {
 
         private static RequestProcessorThreadPool instance;
