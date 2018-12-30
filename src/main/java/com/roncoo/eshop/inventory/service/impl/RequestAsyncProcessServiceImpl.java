@@ -21,25 +21,6 @@ public class RequestAsyncProcessServiceImpl implements RequestAsyncProcessServic
     @Override
     public void process(Request request) {
         try {
-            //读请求去重
-            RequestQueue requestQueue = RequestQueue.getInstance();
-            Map<Integer, Boolean> flagMap = requestQueue.getFlagmap();
-            if(request instanceof ProductInvetoryDBUpdateRequest) {
-                //如果是一个更新缓存数据库的请求，那么就将那个productId对应的标识设置为true
-                flagMap.put(request.getProductId(), true);
-            } else if(request instanceof ProductInventoryCacheRefreshRequest) {
-                //如果是缓存刷新的请求,那么久判断，如果表示不为空，而且是true,就说明之前有一个这个商品的更新请求
-                Boolean flag = flagMap.get(request.getProductId());
-                if(flag == null || flag) {
-                    flagMap.put(request.getProductId(), false);
-                }
-
-                //如果是缓存刷新的请求，而且发现标识不为空，但是标识是false
-                //说明前面已经有一个数据库更新请求+一个缓存刷新请求了
-                if(flag != null && !flag) {
-                    return;
-                }
-            }
             //请求的路由，根据每个商品的id路由到请求队列中去
             ArrayBlockingQueue<Request>  queue = getRouteKey(request.getProductId());
             //将请求放入到对应的内存队列中，完成路由操作

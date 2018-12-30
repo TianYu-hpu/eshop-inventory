@@ -45,13 +45,14 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
     }
 
     /**
-     * 删除redis商品库存缓存
+     * 删除redis商品库存缓存,并更新git
      * @param productInventory
      */
     @Override
     public void removeProductInventoryCache(ProductInventory productInventory) {
         String key = Constants.PRODUCT_INVENTORY_CNT_KEY + productInventory.getProductId();
         redisDao.delete(key);
+        updateProductInventory(productInventory);
     }
 
     /**

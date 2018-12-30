@@ -26,10 +26,6 @@ public class RequestQueue {
      * 内存队列
      */
     private List<ArrayBlockingQueue<Request>> queue = new ArrayList<ArrayBlockingQueue<Request>>();
-    /**
-     * flagMap 用于读请求去重
-     */
-    private Map<Integer, Boolean> flagmap= new ConcurrentHashMap<Integer, Boolean>();
 
     private static class Singleton {
 
@@ -67,14 +63,6 @@ public class RequestQueue {
      */
     public ArrayBlockingQueue<Request> getQueue(int index) {
         return this.queue.get(index);
-    }
-
-    /**
-     *
-     * @return flagMap
-     */
-    public Map<Integer, Boolean> getFlagmap() {
-        return flagmap;
     }
 
 }

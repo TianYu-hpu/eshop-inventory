@@ -17,24 +17,21 @@ public class ProductInventoryCacheRefreshRequest implements Request {
     /**
      * 商品id
      */
-    private Integer productId;
+    private ProductInventory productInventory;
 
-    public ProductInventoryCacheRefreshRequest(Integer productId, ProductInventoryService productInventoryService) {
-        this.productId = productId;
+    public ProductInventoryCacheRefreshRequest(ProductInventory productInventory, ProductInventoryService productInventoryService) {
+        this.productInventory = productInventory;
         this.productInventoryService = productInventoryService;
     }
 
     @Override
     public void process() {
-
-        //查询库存
-        ProductInventory productInventory = productInventoryService.findProductInventory(productId);
         //更新redis缓存
         productInventoryService.updateProductInventoryCache(productInventory);
     }
 
     @Override
     public Integer getProductId() {
-        return productId;
+        return productInventory.getProductId();
     }
 }
